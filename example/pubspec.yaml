@@ -11,10 +11,10 @@ dependencies:
   cupertino_icons: ^0.1.3
   path_provider:
   http:
-  audioplayer:
-    path: ../audioplayer
-  audioplayer_web:
-    path: ../audioplayer_web
+  audioplayer_ns:
+    path: ../audioplayer_ns
+  audioplayer_web_ns:
+    path: ../audioplayer_web_ns
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  s.name             = 'audioplayer_web'
+  s.name             = 'audioplayer_web_ns'
   s.version          = '0.0.1'
   s.summary          = 'No-op implementation of audioplayer web plugin to avoid build issues on iOS'
   s.description      = <<-DESC

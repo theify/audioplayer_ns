@@ -5,7 +5,7 @@
 // ignore: unused_import
 import 'dart:ui';
 
-import 'package:audioplayer_web/audioplayer_web.dart';
+import 'package:audioplayer_web_ns/audioplayer_web_ns.dart';
 
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 

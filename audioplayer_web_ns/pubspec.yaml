@@ -8,7 +8,7 @@ flutter:
     platforms:
       web:
         pluginClass: AudioplayerPlugin
-        fileName: audioplayer_web.dart
+        fileName: audioplayer_web_ns.dart
 
 dependencies:
   flutter:
