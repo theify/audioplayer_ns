@@ -1,4 +1,4 @@
-name: audioplayer
+name: audioplayer_ns
 description: A Flutter audio plugin (Swift/Java) to play remote or local audio files (ios, android, macos)
 version: 0.8.1
 author: Erick Ghaumez <erick@rxla.bz>
