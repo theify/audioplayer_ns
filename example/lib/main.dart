@@ -126,7 +126,8 @@ class _AudioAppState extends State<AudioApp> {
     try {
       // TODO
       var scheme, host, port, path, query;
-      var uri = Uri(scheme: scheme, host: host, port: port, path: path, query: query);
+      var uri =
+          Uri(scheme: scheme, host: host, port: port, path: path, query: query);
       bytes = await readBytes(uri);
     } on ClientException {
       rethrow;
@@ -243,7 +244,9 @@ class _AudioAppState extends State<AudioApp> {
         Text(
           position != null
               ? "${positionText ?? ''} / ${durationText ?? ''}"
-              : duration != null ? durationText : '',
+              : duration != null
+                  ? durationText
+                  : '',
           style: TextStyle(fontSize: 24.0),
         )
       ]);
