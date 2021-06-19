@@ -25,12 +25,12 @@ class AudioApp extends StatefulWidget {
 }
 
 class _AudioAppState extends State<AudioApp> {
-  Duration duration;
-  Duration position;
+  Duration? duration;
+  Duration? position;
 
-  AudioPlayer audioPlayer;
+  AudioPlayer? audioPlayer;
 
-  String localFilePath;
+  String? localFilePath;
 
   PlayerState playerState = PlayerState.stopped;
 
@@ -45,8 +45,8 @@ class _AudioAppState extends State<AudioApp> {
 
   bool isMuted = false;
 
-  StreamSubscription _positionSubscription;
-  StreamSubscription _audioPlayerStateSubscription;
+  StreamSubscription? _positionSubscription;
+  StreamSubscription? _audioPlayerStateSubscription;
 
   @override
   void initState() {
@@ -56,20 +56,20 @@ class _AudioAppState extends State<AudioApp> {
 
   @override
   void dispose() {
-    _positionSubscription.cancel();
-    _audioPlayerStateSubscription.cancel();
-    audioPlayer.stop();
+    _positionSubscription?.cancel();
+    _audioPlayerStateSubscription?.cancel();
+    audioPlayer?.stop();
     super.dispose();
   }
 
   void initAudioPlayer() {
     audioPlayer = AudioPlayer();
-    _positionSubscription = audioPlayer.onAudioPositionChanged
+    _positionSubscription = audioPlayer!.onAudioPositionChanged
         .listen((p) => setState(() => position = p));
     _audioPlayerStateSubscription =
-        audioPlayer.onPlayerStateChanged.listen((s) {
+        audioPlayer!.onPlayerStateChanged.listen((s) {
       if (s == AudioPlayerState.PLAYING) {
-        setState(() => duration = audioPlayer.duration);
+        setState(() => duration = audioPlayer!.duration);
       } else if (s == AudioPlayerState.STOPPED) {
         onComplete();
         setState(() {
@@ -86,24 +86,24 @@ class _AudioAppState extends State<AudioApp> {
   }
 
   Future play() async {
-    await audioPlayer.play(kUrl);
+    await audioPlayer!.play(kUrl);
     setState(() {
       playerState = PlayerState.playing;
     });
   }
 
   Future _playLocal() async {
-    await audioPlayer.play(localFilePath, isLocal: true);
+    await audioPlayer!.play(localFilePath!, isLocal: true);
     setState(() => playerState = PlayerState.playing);
   }
 
   Future pause() async {
-    await audioPlayer.pause();
+    await audioPlayer!.pause();
     setState(() => playerState = PlayerState.paused);
   }
 
   Future stop() async {
-    await audioPlayer.stop();
+    await audioPlayer!.stop();
     setState(() {
       playerState = PlayerState.stopped;
       position = Duration();
@@ -111,7 +111,7 @@ class _AudioAppState extends State<AudioApp> {
   }
 
   Future mute(bool muted) async {
-    await audioPlayer.mute(muted);
+    await audioPlayer!.mute(muted);
     setState(() {
       isMuted = muted;
     });
@@ -121,10 +121,13 @@ class _AudioAppState extends State<AudioApp> {
     setState(() => playerState = PlayerState.stopped);
   }
 
-  Future<Uint8List> _loadFileBytes(String url, {OnError onError}) async {
+  Future<Uint8List> _loadFileBytes(String url, {OnError? onError}) async {
     Uint8List bytes;
     try {
-      bytes = await readBytes(url);
+      // TODO
+      var scheme, host, port, path, query;
+      var uri = Uri(scheme: scheme, host: host, port: port, path: path, query: query);
+      bytes = await readBytes(uri);
     } on ClientException {
       rethrow;
     }
@@ -161,7 +164,7 @@ class _AudioAppState extends State<AudioApp> {
             ),
             Material(child: _buildPlayer()),
             if (!kIsWeb)
-              localFilePath != null ? Text(localFilePath) : Container(),
+              localFilePath != null ? Text(localFilePath!) : Container(),
             if (!kIsWeb)
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -213,12 +216,12 @@ class _AudioAppState extends State<AudioApp> {
             ]),
             if (duration != null)
               Slider(
-                  value: position?.inMilliseconds?.toDouble() ?? 0.0,
+                  value: position?.inMilliseconds.toDouble() ?? 0.0,
                   onChanged: (double value) {
-                    return audioPlayer.seek((value / 1000).roundToDouble());
+                    audioPlayer!.seek((value / 1000).roundToDouble());
                   },
                   min: 0.0,
-                  max: duration.inMilliseconds.toDouble()),
+                  max: duration!.inMilliseconds.toDouble()),
             if (position != null) _buildMuteButtons(),
             if (position != null) _buildProgressView()
           ],
@@ -229,9 +232,9 @@ class _AudioAppState extends State<AudioApp> {
         Padding(
           padding: EdgeInsets.all(12.0),
           child: CircularProgressIndicator(
-            value: position != null && position.inMilliseconds > 0
-                ? (position?.inMilliseconds?.toDouble() ?? 0.0) /
-                    (duration?.inMilliseconds?.toDouble() ?? 0.0)
+            value: position != null && position!.inMilliseconds > 0
+                ? (position?.inMilliseconds.toDouble() ?? 0.0) /
+                    (duration?.inMilliseconds.toDouble() ?? 0.0)
                 : 0.0,
             valueColor: AlwaysStoppedAnimation(Colors.cyan),
             backgroundColor: Colors.grey.shade400,
